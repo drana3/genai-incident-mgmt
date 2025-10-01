@@ -55,7 +55,7 @@ def mock_opensearch():
 @pytest.fixture
 def mock_cross_encoder():
     mock = MagicMock()
-    mock.predict = MagicMock(return_value=[0.9, 0.1])  # ✅ real MagicMock
+    mock.predict = MagicMock(return_value=[0.9, 0.1])
     return mock
 
 # ----------------------------

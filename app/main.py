@@ -59,7 +59,7 @@ def assert_aws_credentials():
         sts = boto3.client("sts", region_name=os.getenv(
             "AWS_REGION", "us-east-1"))
         identity = sts.get_caller_identity()
-        logger.info("✅ AWS identity OK: %s", identity.get("Arn"))
+        logger.info("AWS identity OK: %s", identity.get("Arn"))
     except ClientError as e:
         logger.exception("AWS credentials invalid or expired")
         raise RuntimeError("Fix AWS creds or use AWS_PROFILE.") from e
@@ -81,7 +81,7 @@ MODEL_ANALYZER = os.getenv(
 MODEL_EXECUTOR = os.getenv(
     "MODEL_EXECUTOR", "anthropic.claude-3-haiku-20240307-v1:0")
 
-logger.info("🔧 Models: classifier=%s rag=%s analyzer=%s executor=%s",
+logger.info("Models: classifier=%s rag=%s analyzer=%s executor=%s",
             MODEL_CLASSIFIER, MODEL_RAG, MODEL_ANALYZER, MODEL_EXECUTOR)
 
 # ----------------------------
@@ -192,7 +192,7 @@ async def process_alert(alert: Alert):
             "2. Decide if it is most related to: (a) database, (b) network, or (c) application.\n"
             "3. If multiple categories seem possible, pick the most likely one (never say 'uncertain').\n"
             "4. Respond with exactly one lowercase word: `database`, `network`, or `application`.\n"
-            "⚠️ Do not add explanations or extra text."
+            "Do not add explanations or extra text."
         ), expected_output="database OR network OR application", agent=classifier_agent),
 
         Task(description=(
@@ -202,7 +202,7 @@ async def process_alert(alert: Alert):
             "2. Call the RAG_Tool to retrieve the most relevant runbook(s).\n"
             "3. Always return the raw JSON runbook content exactly as retrieved.\n"
             "4. If no runbook is found, return `{}`.\n"
-            "⚠️ Do not generate your own runbook; rely only on RAG_Tool results."
+            "Do not generate your own runbook; rely only on RAG_Tool results."
         ), expected_output="Runbook JSON content", agent=rag_agent),
 
         Task(description=(
@@ -222,7 +222,7 @@ async def process_alert(alert: Alert):
             "  \"resolution\": \"...\",\n"
             "  \"confidence\": 0.xx\n"
             "}\n"
-            "⚠️ No extra text outside the JSON."
+            "No extra text outside the JSON."
         ), expected_output="Valid JSON {issue, root_cause, impact, resolution, confidence}", agent=analyzer_agent),
 
         Task(description=(
@@ -244,7 +244,7 @@ async def process_alert(alert: Alert):
         result = exponential_backoff_retry(
             lambda: crew.kickoff(inputs={"alert": alert.dict()}))
     except (RateLimitError, APIError) as e:
-        logger.exception("❌ Bedrock rate limit/service error: %s", e)
+        logger.exception("Bedrock rate limit/service error: %s", e)
         return {"status": "pending_human", "incident_id": incident_id,
                 "resolution": {"issue": "LLM unavailable", "root_cause": "Rate limited or service error",
                                "impact": "Unknown", "resolution": "Manual investigation required",
@@ -266,7 +266,7 @@ async def process_alert(alert: Alert):
             if "Fix Executor" in agent_name:
                 parsed_executor = parsed_json
     except Exception as e:
-        logger.warning("⚠️ Failed to extract task outputs: %s", e)
+        logger.warning("Failed to extract task outputs: %s", e)
 
     # ---------------- Merge resolution ----------------
     resolution = {"issue": "Unknown", "root_cause": "Unknown", "impact": "Unknown",

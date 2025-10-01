@@ -56,7 +56,7 @@ class RAGTool(BaseTool):
             query_embedding = resp_body.get("embedding", [])
 
             if not query_embedding:
-                logger.warning("⚠️ No embedding returned for query")
+                logger.warning("No embedding returned for query")
                 return []
 
             # Step 2: Search OpenSearch
@@ -92,11 +92,11 @@ class RAGTool(BaseTool):
             return [doc for doc, _ in reranked]
 
         except Exception as e:
-            logger.error("❌ RAG_Tool failed: %s", e, exc_info=True)
+            logger.error("RAG_Tool failed: %s", e, exc_info=True)
             return []
 
 
-# ✅ Exported instance
+
 rag_tool = RAGTool()
 
 

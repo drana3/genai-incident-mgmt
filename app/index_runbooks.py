@@ -25,8 +25,7 @@ awsauth = AWS4Auth(
     session_token=credentials.token,
 )
 
-# OpenSearch domain hostname (NO https://)
-# e.g., search-my-domain-xyz.us-east-1.es.amazonaws.com
+
 opensearch_url = os.getenv("OPENSEARCH_URL")
 
 client = OpenSearch(
@@ -48,7 +47,7 @@ INDEX_NAME = "runbooks"
 def create_index_if_missing():
     """Create OpenSearch index with knn_vector mapping for Titan embeddings."""
     if not client.indices.exists(INDEX_NAME):
-        print(f"📌 Creating index '{INDEX_NAME}' ...")
+        print(f"Creating index '{INDEX_NAME}' ...")
         client.indices.create(
             index=INDEX_NAME,
             body={
@@ -69,9 +68,9 @@ def create_index_if_missing():
                 },
             },
         )
-        print("✅ Index created")
+        print("Index created")
     else:
-        print(f"ℹ️ Index '{INDEX_NAME}' already exists")
+        print(f"Index '{INDEX_NAME}' already exists")
 
 
 def embed_text(text: str):
@@ -107,7 +106,7 @@ def index_runbook(file_path: str):
     }
 
     client.index(index=INDEX_NAME, id=runbook_id, body=doc)
-    print(f"✅ Indexed runbook {runbook_id}")
+    print(f"Indexed runbook {runbook_id}")
 
 
 def index_all_runbooks():
@@ -116,14 +115,14 @@ def index_all_runbooks():
     files = glob.glob("app/runbooks/*.json")
 
     if not files:
-        print("⚠️ No runbooks found in app/runbooks/")
+        print(" No runbooks found in app/runbooks/")
         return
 
     for file in files:
         try:
             index_runbook(file)
         except Exception as e:
-            print(f"❌ Failed to index {file}: {e}")
+            print(f"Failed to index {file}: {e}")
 
 
 if __name__ == "__main__":

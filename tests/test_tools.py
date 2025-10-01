@@ -8,7 +8,7 @@ from unittest.mock import patch, MagicMock
 async def test_rag_retrieve_success(mock_bedrock, mock_opensearch):
     with patch('app.tools.boto3.client', return_value=mock_bedrock), \
             patch('app.tools.OpenSearch', return_value=mock_opensearch), \
-            patch('app.tools.CrossEncoder') as MockCE:  # ✅ FIXED target
+            patch('app.tools.CrossEncoder') as MockCE:
 
         instance = MockCE.return_value
         instance.predict = MagicMock(return_value=[0.9, 0.1])
