@@ -1,0 +1,7 @@
+{
+    "id": "runbook-db-timeout",
+    "issue": "Database Timeout",
+    "root_cause": "High connection load",
+    "impact": "Delayed API responses",
+    "resolution_steps": ["Scale up RDS instance", "Restart application service"]
+}

@@ -1,0 +1,27 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+env/
+venv/
+*.egg-info/
+
+# Poetry / Pip
+poetry.lock
+*.egg
+*.eggs/
+dist/
+build/
+
+# Env & secrets
+.env
+*.pem
+
+# Logs
+*.log
+logs/
+.DS_Store
+.cache/cdk.out/
+cdk.out/
